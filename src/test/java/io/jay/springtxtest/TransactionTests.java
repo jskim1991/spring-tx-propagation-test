@@ -111,7 +111,7 @@ public class TransactionTests {
 
     @Test
     @DisplayName("Child with NESTED works as a savepoint with parent transaction")
-    void test_parentWithRequired_and_childWithNested_throwsNotSupportedExceptionInChildTransaction() {
+    void test_parentWithRequired_and_childWithNested_throwsNestedTransactionNotSupportedExceptionInChildTransaction() {
         parentService.invokeChildWithNested();
         assertThat(parentRepository.findAll().size(), equalTo(1));
         assertThat(childRepository.findAll().size(), equalTo(0));
