@@ -43,7 +43,6 @@ public class ParentService {
     }
 
     public void invokeChildWithMandatoryWithoutTransaction() {
-        // Creating new transaction with name [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
         repository.save(new ParentEntity());
         try {
             // No existing transaction found for transaction marked with propagation 'mandatory'
