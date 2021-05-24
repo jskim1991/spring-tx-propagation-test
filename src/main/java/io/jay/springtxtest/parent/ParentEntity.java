@@ -1,4 +1,4 @@
-package io.jay.springtxtest;
+package io.jay.springtxtest.parent;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

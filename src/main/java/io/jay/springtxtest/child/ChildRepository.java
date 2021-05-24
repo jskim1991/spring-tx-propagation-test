@@ -1,4 +1,4 @@
-package io.jay.springtxtest;
+package io.jay.springtxtest.child;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

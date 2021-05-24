@@ -1,5 +1,6 @@
-package io.jay.springtxtest;
+package io.jay.springtxtest.parent;
 
+import io.jay.springtxtest.child.ChildService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +17,7 @@ public class ParentService {
 
     @Transactional
     public void invokeChildWithRequired() {
-        // Creating new transaction with name [io.jay.springtxtest.ParentService.invokeChildWithRequired]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+        // Creating new transaction with name [io.jay.springtxtest.parent.ParentService.invokeChildWithRequired]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
         repository.save(new ParentEntity());
         try {
             // Participating in existing transaction
@@ -29,10 +30,10 @@ public class ParentService {
 
     @Transactional
     public void invokeChildWithRequiresNew() {
-        // Creating new transaction with name [io.jay.springtxtest.ParentService.invokeChildWithRequiresNew]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+        // Creating new transaction with name [io.jay.springtxtest.parent.ParentService.invokeChildWithRequiresNew]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
         repository.save(new ParentEntity());
         try {
-            // Suspending current transaction, creating new transaction with name [io.jay.springtxtest.ChildService.runWithRequiresNew]
+            // Suspending current transaction, creating new transaction with name [io.jay.springtxtest.child.ChildService.runWithRequiresNew]
             childService.runWithRequiresNew();
             // Initiating transaction rollback
             // Resuming suspended transaction after completion of inner transaction
@@ -54,7 +55,7 @@ public class ParentService {
 
     @Transactional
     public void invokeChildWithMandatory() {
-        // Creating new transaction with name [io.jay.springtxtest.ParentService.invokeChildWithMandatory]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+        // Creating new transaction with name [io.jay.springtxtest.parent.ParentService.invokeChildWithMandatory]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
         repository.save(new ParentEntity());
         try {
             // Participating in existing transaction
@@ -67,7 +68,7 @@ public class ParentService {
 
     @Transactional
     public void invokeChildWithSupports() {
-        // Creating new transaction with name [io.jay.springtxtest.ParentService.invokeChildWithSupports]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+        // Creating new transaction with name [io.jay.springtxtest.parent.ParentService.invokeChildWithSupports]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
         repository.save(new ParentEntity());
         try {
             // Participating in existing transaction
@@ -91,7 +92,7 @@ public class ParentService {
 
     @Transactional
     public void invokeChildWithNever() {
-        // Creating new transaction with name [io.jay.springtxtest.ParentService.invokeChildWithNever]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+        // Creating new transaction with name [io.jay.springtxtest.parent.ParentService.invokeChildWithNever]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
         repository.save(new ParentEntity());
         try {
             childService.runWithNever();
@@ -114,7 +115,7 @@ public class ParentService {
 
     @Transactional
     public void invokeChildWithNotSupported() {
-        // Creating new transaction with name [io.jay.springtxtest.ParentService.invokeChildWithNotSupported]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+        // Creating new transaction with name [io.jay.springtxtest.parent.ParentService.invokeChildWithNotSupported]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
         repository.save(new ParentEntity());
         try {
             // Suspending current transaction
@@ -140,10 +141,10 @@ public class ParentService {
 
     @Transactional
     public void invokeChildWithNested() {
-        // Creating new transaction with name [io.jay.springtxtest.ParentService.invokeChildWithNested]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+        // Creating new transaction with name [io.jay.springtxtest.parent.ParentService.invokeChildWithNested]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
         repository.save(new ParentEntity());
         try {
-            // Creating nested transaction with name [io.jay.springtxtest.ChildService.runWithNested]
+            // Creating nested transaction with name [io.jay.springtxtest.child.ChildService.runWithNested]
             childService.runWithNested();
         } catch (Exception e) {
             // JpaDialect does not support savepoints - check your JPA provider's capabilities
@@ -154,7 +155,7 @@ public class ParentService {
     public void invokeChildWithNestedWithoutTransaction() {
         repository.save(new ParentEntity());
         try {
-            // Creating new transaction with name [io.jay.springtxtest.ChildService.runWithNested]: PROPAGATION_NESTED,ISOLATION_DEFAULT
+            // Creating new transaction with name [io.jay.springtxtest.child.ChildService.runWithNested]: PROPAGATION_NESTED,ISOLATION_DEFAULT
             childService.runWithNested();
             // Initiating transaction rollback
         } catch (Exception e) {

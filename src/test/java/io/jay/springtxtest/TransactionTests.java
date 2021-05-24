@@ -1,5 +1,8 @@
 package io.jay.springtxtest;
 
+import io.jay.springtxtest.child.ChildRepository;
+import io.jay.springtxtest.parent.ParentRepository;
+import io.jay.springtxtest.parent.ParentService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +47,8 @@ public class TransactionTests {
     }
 
     @Test
-    @DisplayName("Child does not perform due to: No existing transaction found for transaction marked with propagation 'mandatory' without parent transaction")
+    @DisplayName("Child does not perform due to: " +
+            "No existing transaction found for transaction marked with propagation 'mandatory' without parent transaction")
     void test_parentWithoutRequired_and_childWithMandatory_savesParentTransactionOnly() {
         parentService.invokeChildWithMandatoryWithoutTransaction();
         assertThat(parentRepository.findAll().size(), equalTo(1));
