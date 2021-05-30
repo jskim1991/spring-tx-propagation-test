@@ -39,7 +39,7 @@ public class TransactionTests {
     }
 
     @Test
-    @DisplayName("Child suspends parent transaction and creates a new transaction")
+    @DisplayName("Child with REQUIRES_NEW suspends parent transaction and creates a new transaction")
     void test_parentWithRequired_and_childWithRequiresNew_savesParentTransactionOnly() {
         parentService.invokeChildWithRequiresNew();
         assertThat(parentRepository.findAll().size(), equalTo(1));
@@ -47,7 +47,7 @@ public class TransactionTests {
     }
 
     @Test
-    @DisplayName("Child does not perform due to: " +
+    @DisplayName("Child with MANDATORY does not perform due to: " +
             "No existing transaction found for transaction marked with propagation 'mandatory' without parent transaction")
     void test_parentWithoutRequired_and_childWithMandatory_savesParentTransactionOnly() {
         parentService.invokeChildWithMandatoryWithoutTransaction();
@@ -82,7 +82,8 @@ public class TransactionTests {
     }
 
     @Test
-    @DisplayName("Child with NEVER does not perform due to: Existing transaction found for transaction marked with propagation 'never'")
+    @DisplayName("Child with NEVER does not perform due to: " +
+            "Existing transaction found for transaction marked with propagation 'never'")
     void test_parentWithRequired_and_childWithNever_throwsExceptionInChildTransaction() {
         parentService.invokeChildWithNever();
         assertThat(parentRepository.findAll().size(), equalTo(1));
@@ -98,7 +99,7 @@ public class TransactionTests {
     }
 
     @Test
-    @DisplayName("Child with NOT_SUPPORTED suspends parent transaction and run non-transactional")
+    @DisplayName("Child with NOT_SUPPORTED suspends parent transaction and runs non-transactional")
     void test_parentWithRequired_and_childWithNotSupported_childRunsNonTransactional() {
         parentService.invokeChildWithNotSupported();
         assertThat(parentRepository.findAll().size(), equalTo(1));
@@ -106,7 +107,7 @@ public class TransactionTests {
     }
 
     @Test
-    @DisplayName("Child with NOT_SUPPORTED without parent transaction runs separately")
+    @DisplayName("Child with NOT_SUPPORTED without parent transaction runs non-transactional")
     void test_parentWithoutRequired_and_childWithNotSupported_doesNotRunInTransaction() {
         parentService.invokeChildWithNotSupportedWithoutTransaction();
         assertThat(parentRepository.findAll().size(), equalTo(1));
@@ -114,7 +115,7 @@ public class TransactionTests {
     }
 
     @Test
-    @DisplayName("Child with NESTED works as a savepoint with parent transaction")
+    @DisplayName("Child with NESTED marks a savepoint with parent transaction; JPA dialect not supported to test this")
     void test_parentWithRequired_and_childWithNested_throwsNestedTransactionNotSupportedExceptionInChildTransaction() {
         parentService.invokeChildWithNested();
         assertThat(parentRepository.findAll().size(), equalTo(1));
