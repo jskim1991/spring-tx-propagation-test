@@ -1,6 +1,5 @@
 package io.jay.springtxtest;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
@@ -26,8 +25,10 @@ public class TransactionTests {
     @Autowired
     private ParentRepository parentRepository;
 
+    /**
+     * Child with REQUIRED appends to parent transaction
+     */
     @Test
-    @DisplayName("Child with REQUIRED appends to parent transaction")
     void test_parentWithRequired_and_childWithRequired_throwsUnexpectedRollbackException() {
         assertThrows(UnexpectedRollbackException.class, () ->
                 parentService.invokeChildWithRequired());
@@ -35,24 +36,31 @@ public class TransactionTests {
         assertThat(childRepository.findAll().size(), equalTo(0));
     }
 
+    /**
+     * Child with REQUIRES_NEW suspends parent transaction and creates a new transaction
+     */
     @Test
-    @DisplayName("Child suspends parent transaction and creates a new transaction")
     void test_parentWithRequired_and_childWithRequiresNew_savesParentTransactionOnly() {
         parentService.invokeChildWithRequiresNew();
         assertThat(parentRepository.findAll().size(), equalTo(1));
         assertThat(childRepository.findAll().size(), equalTo(0));
     }
 
+    /**
+     * Child with MANDATORY does not perform due to:
+     * No existing transaction found for transaction marked with propagation 'mandatory' without parent transaction
+     */
     @Test
-    @DisplayName("Child does not perform due to: No existing transaction found for transaction marked with propagation 'mandatory' without parent transaction")
     void test_parentWithoutRequired_and_childWithMandatory_savesParentTransactionOnly() {
         parentService.invokeChildWithMandatoryWithoutTransaction();
         assertThat(parentRepository.findAll().size(), equalTo(1));
         assertThat(childRepository.findAll().size(), equalTo(0));
     }
 
+    /**
+     * Child with MANDATORY appends to parent transaction
+     */
     @Test
-    @DisplayName("Child with MANDATORY appends to parent transaction")
     void test_parentWithRequired_and_childWithMandatory_throwsUnexpectedRollbackException() {
         assertThrows(UnexpectedRollbackException.class, () ->
                 parentService.invokeChildWithMandatory());
@@ -60,8 +68,10 @@ public class TransactionTests {
         assertThat(childRepository.findAll().size(), equalTo(0));
     }
 
+    /**
+     * Child with SUPPORTS appends to parent transaction
+     */
     @Test
-    @DisplayName("Child with SUPPORTS appends to parent transaction")
     void test_parentWithRequired_and_childWithSupports_throwsUnexpectedRollbackException() {
         assertThrows(UnexpectedRollbackException.class, () ->
                 parentService.invokeChildWithSupports());
@@ -69,56 +79,71 @@ public class TransactionTests {
         assertThat(childRepository.findAll().size(), equalTo(0));
     }
 
+    /**
+     * Child with SUPPORTS runs non-transactional if parent transaction does not exist
+     */
     @Test
-    @DisplayName("Child with SUPPORTS runs non-transaction without parent transaction")
     void test_parentWithoutRequired_and_childWithSupports_doesNotRunInTransaction() {
         parentService.invokeChildWithSupportsWithoutTransaction();
         assertThat(parentRepository.findAll().size(), equalTo(1));
         assertThat(childRepository.findAll().size(), equalTo(1));
     }
 
+    /**
+     * Child with NEVER does not perform due to:
+     * Existing transaction found for transaction marked with propagation NEVER
+     */
     @Test
-    @DisplayName("Child with NEVER does not perform due to: Existing transaction found for transaction marked with propagation 'never'")
     void test_parentWithRequired_and_childWithNever_throwsExceptionInChildTransaction() {
         parentService.invokeChildWithNever();
         assertThat(parentRepository.findAll().size(), equalTo(1));
         assertThat(childRepository.findAll().size(), equalTo(0));
     }
 
+    /**
+     * Child with NEVER runs non-transactional if parent transaction does not exist
+     */
     @Test
-    @DisplayName("Child with NEVER runs non-transactional without parent transaction")
     void test_parentWithoutRequired_and_childWithNever_doesNotRunInTransaction() {
         parentService.invokeChildWithNeverWithoutTransaction();
         assertThat(parentRepository.findAll().size(), equalTo(1));
         assertThat(childRepository.findAll().size(), equalTo(1));
     }
 
+    /**
+     * Child with NOT_SUPPORTED suspends parent transaction and run non-transactional
+     */
     @Test
-    @DisplayName("Child with NOT_SUPPORTED suspends parent transaction and run non-transactional")
     void test_parentWithRequired_and_childWithNotSupported_childRunsNonTransactional() {
         parentService.invokeChildWithNotSupported();
         assertThat(parentRepository.findAll().size(), equalTo(1));
         assertThat(childRepository.findAll().size(), equalTo(1));
     }
 
+    /**
+     * Child with NOT_SUPPORTED runs non-transactional if parent transaction does not exist
+     */
     @Test
-    @DisplayName("Child with NOT_SUPPORTED without parent transaction runs separately")
     void test_parentWithoutRequired_and_childWithNotSupported_doesNotRunInTransaction() {
         parentService.invokeChildWithNotSupportedWithoutTransaction();
         assertThat(parentRepository.findAll().size(), equalTo(1));
         assertThat(childRepository.findAll().size(), equalTo(1));
     }
 
+    /**
+     * Child with NESTED works as a savepoint with parent transaction
+     */
     @Test
-    @DisplayName("Child with NESTED works as a savepoint with parent transaction")
     void test_parentWithRequired_and_childWithNested_throwsNestedTransactionNotSupportedExceptionInChildTransaction() {
         parentService.invokeChildWithNested();
         assertThat(parentRepository.findAll().size(), equalTo(1));
         assertThat(childRepository.findAll().size(), equalTo(0));
     }
 
+    /**
+     * Child with NESTED creates a new transaction without parent transaction
+     */
     @Test
-    @DisplayName("Child with NESTED creates a new transaction without parent transaction")
     void test_parentWithoutRequired_and_childWithNested_createsChildTransaction() {
         parentService.invokeChildWithNestedWithoutTransaction();
         assertThat(parentRepository.findAll().size(), equalTo(1));
