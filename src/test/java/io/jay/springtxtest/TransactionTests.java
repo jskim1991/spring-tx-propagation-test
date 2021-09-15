@@ -1,5 +1,8 @@
 package io.jay.springtxtest;
 
+import io.jay.springtxtest.child.ChildRepository;
+import io.jay.springtxtest.parent.ParentRepository;
+import io.jay.springtxtest.parent.ParentService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
