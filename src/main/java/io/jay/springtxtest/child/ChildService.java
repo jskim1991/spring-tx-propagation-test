@@ -1,4 +1,4 @@
-package io.jay.springtxtest;
+package io.jay.springtxtest.child;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -15,48 +15,40 @@ public class ChildService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void runWithRequired() {
-        System.out.println("** Start of Child Transaction");
-        repository.save(new ChildEntity());
-        throw new RuntimeException("error");
+        run();
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void runWithRequiresNew() {
-        System.out.println("** Start of Child Transaction");
-        repository.save(new ChildEntity());
-        throw new RuntimeException("error");
+        run();
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
     public void runWithMandatory() {
-        System.out.println("** Start of Child Transaction");
-        repository.save(new ChildEntity());
-        throw new RuntimeException("error");
+        run();
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
     public void runWithSupports() {
-        System.out.println("** Start of Child Transaction");
-        repository.save(new ChildEntity());
-        throw new RuntimeException("error");
+        run();
     }
 
     @Transactional(propagation = Propagation.NEVER)
     public void runWithNever() {
-        System.out.println("** Start of Child Transaction");
-        repository.save(new ChildEntity());
-        throw new RuntimeException("error");
+        run();
     }
 
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public void runWithNotSupported() {
-        System.out.println("** Start of Child Transaction");
-        repository.save(new ChildEntity());
-        throw new RuntimeException("error");
+        run();
     }
 
     @Transactional(propagation = Propagation.NESTED)
     public void runWithNested() {
+        run();
+    }
+
+    private void run() {
         System.out.println("** Start of Child Transaction");
         repository.save(new ChildEntity());
         throw new RuntimeException("error");
